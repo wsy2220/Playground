@@ -1,6 +1,8 @@
-void selection(int *pool, int n)
+#include "sys.h"
+void selection(int *pool, size_t n)
 {
-	int i, j, t, m;
+	int t;
+	size_t i, j, m;
 	for(i = 0; i < n - 1; i++){
 		t = pool[i];
 		m = i;

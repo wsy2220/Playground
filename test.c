@@ -1,9 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "sys.h"
 #include "sort.h"
 
-#define SIZE 0x1000
-#define SORT selection 
+#define SIZE 0x5
+#define SORT insert_rec
 #define SEED 1
 
 int pool[SIZE];
