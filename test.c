@@ -1,8 +1,8 @@
 #include "sys.h"
 #include "sort.h"
 
-#define SIZE 0x5
-#define SORT insert_rec
+#define SIZE 0x100
+#define SORT bubble_sort 
 #define SEED 1
 
 int pool[SIZE];

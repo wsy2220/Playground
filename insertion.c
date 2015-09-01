@@ -1,4 +1,36 @@
 #include "sys.h"
+
+/* binary search for t in pool[n], assuming pool
+ * is sorted in increasing order */
+size_t bin_search(int *pool, size_t n, int t, int *status)
+{
+	size_t result = n / 2, upper = n - 1, lower = 0;
+	if(n == 1){
+		*status = 1;
+		return 0;
+	}
+	if(n == 0){
+		fprintf(stderr,"wrong argument for bin_search.\n");
+		exit(1);
+	}
+	while(pool[result] != t && result > lower && result < upper){
+		printf("%lu\n", result);
+		if(pool[result] > t){
+			upper = result;
+			result = lower + (upper - lower) / 2;
+		}
+		else{
+			lower = result;
+			result = lower + (upper + 1 - result) / 2;
+		}
+	}
+	if(pool[result] == t)
+		*status = 1;
+	else
+		*status = 0;
+	return result;
+}
+
 void insertion(int *pool, size_t n)
 {
 	size_t i, j;
