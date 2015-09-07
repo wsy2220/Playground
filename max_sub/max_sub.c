@@ -33,6 +33,7 @@ int max_cross(int *A, range *input, range *output)
 	return sum_low + sum_high;
 }
 
+/* recurrsive solution */
 int max_sub(int *A, range *input, range *output)
 {
 	if(input->lower == input->upper){
@@ -70,11 +71,12 @@ int max_sub(int *A, range *input, range *output)
 	}
 }
 
+/* brute force solution */
 int max_sub_b(int *A, range *input, range *output)
 {
 	ssize_t i, j;
 	int sum, max = INT_MIN;
-	for(i = 0; i <= input->upper; i++){
+	for(i = input->lower; i <= input->upper; i++){
 		sum = 0;
 		for(j = i; j <= input->upper; j++){
 			sum += A[j];
@@ -88,13 +90,36 @@ int max_sub_b(int *A, range *input, range *output)
 	return max;
 }
 
+/* linear-time solution */
+int max_sub_c(int *A, range *input, range *output)
+{
+	ssize_t i, lower = input->lower, upper = input->lower;
+	int sum = A[input->lower], max = sum; 
+	for(i = input->lower + 1; i <= input->upper; i++){
+		if(sum > 0){
+			upper = i;
+			sum += A[i];
+		}
+		else{
+			lower = upper = i;
+			sum = A[i];
+		}
+		if(sum > max){
+			max = sum;
+			output->lower = lower;
+			output->upper = upper;
+		}
+	}
+	return max;
+}
+
 int main()
 {
 	//int test[10] = {2,1,1,-3,1,1,-3,1,2,1};
 	int test[16] = {13,-3,-25,20,-3,-16,-23,18,20,-7,12,-5,-22,15,-4,7};
 	int max;
 	range output, input = {0, sizeof(test)/sizeof(int)/2, sizeof(test)/sizeof(int)-1};
-	max = max_sub_b(test, &input, &output);
+	max = max_sub_c(test, &input, &output);
 	printf("max\tlower\tupper\n");
 	printf("%d\t%lu\t%lu\n", max, output.lower, output.upper);
 	return 0;
