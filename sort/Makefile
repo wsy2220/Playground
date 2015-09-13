@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS =  -Wall -g
-obj = merge.o selection.o test.o  insertion.o bubble.o
+CFLAGS =  -Wall -O2
+obj = merge.o selection.o test.o  insertion.o bubble.o heap.o
 
 
 all: $(obj) 

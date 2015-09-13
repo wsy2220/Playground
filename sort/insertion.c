@@ -37,7 +37,7 @@ void insertion(int *pool, size_t n)
 	int t;
 	for(i = 1; i < n; i++){
 		t = pool[i];
-		for(j = i - 1; j >= 0; j--){
+		for(j = i - 1; j != ~0; j--){
 			if(t < pool[j]){
 				pool[j+1] = pool[j];
 				pool[j] = t;
