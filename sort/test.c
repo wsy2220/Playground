@@ -1,9 +1,11 @@
 #include "sys.h"
 #include "sort.h"
+#include "heap.h"
 
-#define SIZE 0x10000000
-#define SORT merge_sort
+#define SIZE 0x100
+#define SORT qksort
 #define SEED 1
+#define COL  8
 
 
 /* check sorted result. direction 0 increasing, 1 decreasing
@@ -19,8 +21,19 @@ int checksort(int *result, size_t n, int direction)
 	}
 	return 0;
 }
-	
 
+void print_array(int *A, size_t n)
+{
+	size_t i;
+	for(i = 0; i < n; i++){
+		if(i % COL == 0 && i != 0)
+			printf("\n");
+		printf("%8d", A[i]);
+	}
+	printf("\n");
+}
+
+	
 int main()
 {
 	size_t i;
@@ -31,7 +44,11 @@ int main()
 		pool[i] = rand() % SIZE;
 		result[i] = pool[i];
 	}
+	print_array(pool, SIZE);
+	printf("\n");
 	SORT(result, SIZE);
+	print_array(result, SIZE);
+	printf("\n");
 	if(checksort(result, SIZE, 0) == 0)
 		printf("check ok!\n");
 	else
@@ -41,4 +58,29 @@ int main()
 	return 0;
 }
 
-
+/*
+#define N 31
+int main()
+{
+	int A[N];
+	size_t i;
+	for(i = 0; i < N; i++)
+		A[i] = N-1-i;
+	heap_print(A, N);
+	printf("\n");
+	heap_extract_max(A, N);
+	heap_print(A, N-1);
+	printf("\n");
+	heap_increase_key(A, N-1, 20, 40);
+	heap_print(A, N-1);
+	printf("\n");
+	heap_insert(A, N-1, 20);
+	heap_print(A, N);
+	printf("\n");
+	heap_delete(A, N, 4);
+	heap_print(A, N-1);
+	printf("\n");
+	return 0;
+}
+	
+*/

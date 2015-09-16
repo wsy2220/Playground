@@ -4,6 +4,7 @@
 #define HEAP_PARENT(i) ((i+1)/2 - 1)
 #define HEAP_LEFT(i)   ((i)*2 + 1)
 #define HEAP_RIGHT(i)  ((i)*2 + 2)
+#define HEAP_MAX(A)    ((A)[0])
 
 size_t heap_level(size_t index)
 {
@@ -86,5 +87,42 @@ void heap_sort(int *A, size_t n)
 		A[n-1-i] = temp;
 		max_heapify(A, n-i-1, 0);
 	}
+}
+
+/* heap size decreased by 1 after this function */
+int heap_extract_max(int *A, size_t n)
+{
+	if(n == 0){
+		fprintf(stderr,"heap underflow!\n");
+		exit(EXIT_FAILURE);
+	}
+	int ret = A[0];
+	A[0] = A[n-1];
+	max_heapify(A, n-1, 0);
+	return ret;
+}
+
+void heap_increase_key(int *A, size_t n, size_t i, int key)
+{
+	int parent = HEAP_PARENT(i);
+	if(parent != ~0 && A[parent] < key){
+		A[i] = A[parent];
+		heap_increase_key(A, n, parent, key);
+	}
+	else
+		A[i] = key;
+}
+
+/* heap size increased by 1 after this, make sure enough memory before calling */
+void heap_insert(int *A, size_t n, int key)
+{
+	A[n] = INT_MIN;
+	heap_increase_key(A, n+1, n, key);
+}
+
+void heap_delete(int *A, size_t n, size_t i)
+{
+	A[i] = A[n-1];
+	max_heapify(A, n-1, i);
 }
 
