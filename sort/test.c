@@ -2,8 +2,8 @@
 #include "sort.h"
 #include "heap.h"
 
-#define SIZE 0x100
-#define SORT qksort
+#define SIZE 0x100000
+#define SORT qksort_tail
 #define SEED 1
 #define COL  8
 
@@ -44,11 +44,13 @@ int main()
 		pool[i] = rand() % SIZE;
 		result[i] = pool[i];
 	}
-	print_array(pool, SIZE);
-	printf("\n");
+	//print_array(pool, SIZE);
+	//printf("\n");
+	clock_t start = clock();
 	SORT(result, SIZE);
-	print_array(result, SIZE);
-	printf("\n");
+	printf("cpu time: %f s\n", (double)(clock()-start)/CLOCKS_PER_SEC);
+	//print_array(result, SIZE);
+	//printf("\n");
 	if(checksort(result, SIZE, 0) == 0)
 		printf("check ok!\n");
 	else
@@ -82,5 +84,4 @@ int main()
 	printf("\n");
 	return 0;
 }
-	
 */
