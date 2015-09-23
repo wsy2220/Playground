@@ -2,8 +2,8 @@
 #include "sort.h"
 #include "heap.h"
 
-#define SIZE 0x100000
-#define SORT qksort_tail
+#define SIZE 0x10000
+#define SORT count_sort
 #define SEED 1
 #define COL  8
 

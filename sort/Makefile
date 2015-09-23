@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS =  -Wall -Os
-obj = merge.o selection.o test.o  insertion.o bubble.o heap.o qsort.o
+obj = merge.o selection.o test.o  insertion.o bubble.o heap.o qsort.o count.o
 
 
 all: $(obj) 

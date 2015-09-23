@@ -9,4 +9,5 @@ void qksort(int *A, size_t n);
 void qksort_h(int *A, size_t n);
 void qksort_eq(int *A, size_t n);
 void qksort_tail(int *A, size_t n);
+void count_sort(int *A, size_t n);
 
