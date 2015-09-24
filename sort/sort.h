@@ -11,3 +11,4 @@ void qksort_eq(int *A, size_t n);
 void qksort_tail(int *A, size_t n);
 void count_sort(int *A, size_t n);
 
+int rselect(int *A, size_t n, size_t m);
