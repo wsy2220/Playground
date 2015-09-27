@@ -68,8 +68,52 @@ void lk_list_test()
 	lk_free(&list);
 }
 
+void lks_list_test()
+{
+	lks_list list;
+	lks_init(&list);
+	size_t i;
+	for(i = 0; i < N; i++)
+		lks_insert(&list, (int)i);
+	lks_print(&list);
+	printf("\n");
+	sglk_reverse(&list);
+	lks_print(&list);
+	printf("\n");
+	lks_free(&list);
+}
+
+void xlk_list_test()
+{
+	xlk_list list;
+	xlk_element *ele;
+	int r;
+	xlk_init(&list);
+	size_t i;
+	for(i = 0; i < N; i++)
+		xlk_insert(&list, (int)i);
+	xlk_print(&list);
+	for(i = 0; i < N; i++){
+		r = rand() % N;
+		ele = xlk_search(&list, r);
+		if(ele != NULL){
+			printf("%d(%d) found\n", r, ele->key);
+			xlk_delete(&list, ele);
+		}
+		else
+			printf("%d not found\n", r);
+	}
+
+	xlk_print(&list);
+	printf("\n");
+	xlk_reverse(&list);
+	xlk_print(&list);
+	xlk_free(&list);
+}
+
+
 int main()
 {
-	lk_list_test();
+	xlk_list_test();
 	return 0;
 }

@@ -1,7 +1,7 @@
 CC = gcc
-CFLAGS =  -Wall -Os -I../include
+CFLAGS =  -Wall -Os -I../include 
 out = test
-obj = ../utils/utils.o test.o stack.o queue.o lk_list.o
+obj = ../utils/utils.o ../utils/sys.o test.o stack.o queue.o lk_list.o
 
 
 all: $(obj) 
