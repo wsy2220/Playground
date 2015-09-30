@@ -3,6 +3,7 @@
 #include "stack.h"
 #include "queue.h"
 #include "lk_list.h"
+#include "tree.h"
 
 #define N 0x20
 
@@ -111,9 +112,28 @@ void xlk_list_test()
 	xlk_free(&list);
 }
 
+void bin_tree_test()
+{
+	bin_node *p[N] ;
+	size_t i;
+	p[0] = malloc(sizeof(bin_node));
+	p[0]->key = 0;
+	for(i = 1; i < N; i++){
+		p[i] = malloc(sizeof(bin_node));
+		p[i]->key = i;
+		p[i]->parent = p[(i-1)/2];
+		if(i % 2 == 1)
+			p[i]->parent->lchild = p[i];
+		else
+			p[i]->parent->rchild = p[i];
+	}
+	bin_tree_rprint(p[0]);
+}
 
+
+		
 int main()
 {
-	xlk_list_test();
+	bin_tree_test();
 	return 0;
 }
