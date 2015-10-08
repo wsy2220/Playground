@@ -4,6 +4,7 @@
 #include "queue.h"
 #include "lk_list.h"
 #include "tree.h"
+#include "hash_table.h"
 
 #define N 0x20
 
@@ -118,22 +119,98 @@ void bin_tree_test()
 	size_t i;
 	p[0] = malloc(sizeof(bin_node));
 	p[0]->key = 0;
+	p[0]->parent = NULL;
 	for(i = 1; i < N; i++){
 		p[i] = malloc(sizeof(bin_node));
 		p[i]->key = i;
 		p[i]->parent = p[(i-1)/2];
+		p[i]->lchild = p[i]->rchild = NULL;
 		if(i % 2 == 1)
 			p[i]->parent->lchild = p[i];
 		else
 			p[i]->parent->rchild = p[i];
 	}
-	bin_tree_rprint(p[0]);
+	bin_tree_llprint(p[0]);
+}
+
+void sib_tree_test()
+{
+	sib_node *p[N];
+	size_t i;
+	for(i = 0; i < N; i++)
+		p[i] = malloc(sizeof(sib_node));
+	p[0]->key = 0;
+	p[0]->parent = NULL;
+	p[0]->sibling = NULL;
+	for(i = 1; i < N; i++){
+		p[i]->key = i;
+		p[i]->parent = p[(i-1)/4];
+		p[i]->lchild = NULL;
+		if(i % 4 == 1){
+			p[i]->parent->lchild = p[i];
+			p[i]->sibling = (i >= N-1) ? NULL : p[i+1];
+		}
+		else if(i % 4 == 0){
+			p[i]->sibling = NULL;
+		}
+		else{
+			p[i]->sibling = (i >= N-1) ? NULL : p[i+1];
+		}
+	}
+	for(i = 0; i < N; i++)
+		printf("%d  %p  %p  %p\n",p[i]->key, p[i]->parent, p[i]->lchild, p[i]->sibling);
+	sib_tree_print(p[0]);
+}
+
+#define MAX_LEN 0x1000
+#define MAX_LINE 0x1000
+void hash_table_test()
+{
+	hash_table ht;
+	ht.size = 569;
+	ht.hash = hash_str;
+	ht.iseq = iseq_str;
+	ht.frac = 0.618;
+	ht.print = print_str;
+	hash_table_alloc(&ht);
+	FILE *fp = Fopen("/home/wsy/src/git/git.c", "r");
+	string *strpool[MAX_LINE], *str;
+	size_t i, line_total;
+	for(i = 0; i < MAX_LINE; i++){
+		str = malloc(MAX_LEN + sizeof(string));
+		strpool[i] = str;
+		str->strp = (char *)str + sizeof(string);
+		str->nline = i + 1;
+		if(fgets(str->strp, MAX_LEN, fp) != NULL){
+			str->length = strlen(str->strp);
+			hash_table_insert(&ht, strpool[i]);
+		}
+		else{
+			strpool[i] = NULL;
+			free(str);
+			break;
+		}
+	}
+	line_total = i;
+	string sample, *result;
+	sample.strp = "{\n";
+	sample.length = strlen(sample.strp);
+	result = hash_table_search(&ht, &sample);
+	//hash_table_print(&ht);
+	if(result != NULL)
+		printf("%lu\t%s",result->nline, result->strp);
+	else
+		printf("not found\n");
+	hash_table_destroy(&ht);
+	for(i = 0; i < line_total; i++)
+		free(strpool[i]);
+	Fclose(fp);
 }
 
 
 		
 int main()
 {
-	bin_tree_test();
+	hash_table_test();
 	return 0;
 }
