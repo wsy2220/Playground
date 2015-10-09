@@ -5,6 +5,8 @@
 #include "lk_list.h"
 #include "tree.h"
 #include "hash_table.h"
+#include "open_hash.h"
+#include "string.h"
 
 #define N 0x20
 
@@ -164,6 +166,7 @@ void sib_tree_test()
 
 #define MAX_LEN 0x1000
 #define MAX_LINE 0x1000
+#define PATH "/home/wsy/src/git/git.c"
 void hash_table_test()
 {
 	hash_table ht;
@@ -173,7 +176,7 @@ void hash_table_test()
 	ht.frac = 0.618;
 	ht.print = print_str;
 	hash_table_alloc(&ht);
-	FILE *fp = Fopen("/home/wsy/src/git/git.c", "r");
+	FILE *fp = Fopen(PATH, "r");
 	string *strpool[MAX_LINE], *str;
 	size_t i, line_total;
 	for(i = 0; i < MAX_LINE; i++){
@@ -207,10 +210,47 @@ void hash_table_test()
 	Fclose(fp);
 }
 
+void open_hash_test()
+{
+	open_table ot;
+	ot.size = MAX_LINE;
+	ot.entry_size = sizeof(string);
+	ot.hash = open_hash_str;
+	ot.getstat = getstat_str;
+	ot.setstat = setstat_str;
+	ot.iseq = iseq_str;
+	ot.print = print_str;
+	ot.free_entry = free_str;
+	open_hash_alloc(&ot);
+	FILE *fp = Fopen(PATH, "r");
+	string current, *result;
+	size_t i;
+	for(i = 0; i < MAX_LINE; i++){
+		char *s = Malloc(MAX_LEN);
+		if(fgets(s, MAX_LEN, fp) != NULL){
+			current.length = strlen(s);
+			current.strp = s;
+			current.nline = i + 1;
+			open_hash_insert(&ot, &current);
+		}
+		else{
+			free(s);
+			break;
+		}
+	}
+	//open_hash_print(&ot);
+	current.strp = "int main(int argc, char **av)\n";
+	current.length = strlen(current.strp);
+	result = open_hash_search(&ot, &current);
+	if(result != NULL)
+		printf("%lu\t%s",result->nline, result->strp);
+	else
+		printf("not found\n");
+	open_hash_free(&ot);
+}
 
-		
 int main()
 {
-	hash_table_test();
+	open_hash_test();
 	return 0;
 }

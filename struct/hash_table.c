@@ -1,37 +1,14 @@
 #include "sys.h"
 #include <math.h>
 #include "hash_table.h"
+#include "string.h"
 
-size_t div_hash(unsigned long key, size_t size);
-size_t mul_hash(unsigned long key, size_t size, double frac);
-
-
-int iseq_str(void *obj1, void *obj2)
-{
-	string *str1 = obj1, *str2 = obj2;
-	return !strcmp(str1->strp, str2->strp);
-}
-
-unsigned long getkey_str(string *str)
-{
-	unsigned long key = 0;
-	size_t i;
-	for(i = 0; i < str->length; i++)
-		key += str->strp[i];
-	return key;
-}
 
 size_t hash_str(void *obj, hash_table *htable)
 {
 	string *str = obj;
 	unsigned long key = getkey_str(str);
 	return div_hash(key, htable->size);
-}
-
-void print_str(void *obj)
-{
-	string *str = obj;
-	printf("%s", str->strp);
 }
 
 void hash_table_alloc(hash_table *htable)
