@@ -4,8 +4,8 @@ typedef struct open_table{
 	size_t size;
 	size_t entry_size;
 	size_t (*hash)(void *obj, size_t m, struct open_table *otable);
-	enum entry_stat (*getstat)(void *entry);
-	void (*setstat)(void *entry, enum entry_stat);
+	int (*getstat)(void *entry);
+	void (*setstat)(void *entry, int stat);
 	int (*iseq)(void *entry, void *obj);
 	void (*print)(void *obj);
 	void (*free_entry)(void *entry); /*free resources related to the entry */
