@@ -37,13 +37,14 @@ void bin_tree_free(bin_node *root)
 	return;
 }
 
+/* all print functions are in-order */
 void bin_tree_rprint(bin_node *root)
 {
 	if(root == NULL)
 		return;
 	bin_tree_rprint(root->lchild);
-	bin_tree_rprint(root->rchild);
 	printf("%d\n", root->key);
+	bin_tree_rprint(root->rchild);
 }
 
 #define ST_SIZE 0x100
@@ -64,7 +65,6 @@ void bin_tree_lprint(bin_node *root)
 			continue;
 		}
 		if(stack[top].lprinted && stack[top].rprinted){
-			printf("%d\n", stack[top].node->key);
 			top --;
 			continue;
 		}
@@ -77,6 +77,7 @@ void bin_tree_lprint(bin_node *root)
 			continue;
 		}
 		if(stack[top].lprinted && !stack[top].rprinted){
+			printf("%d\n", stack[top].node->key);
 			stack[top].rprinted = 1;
 			top ++;
 			stack[top].node = stack[top-1].node->rchild;
@@ -91,24 +92,34 @@ void bin_tree_lprint(bin_node *root)
 void bin_tree_llprint(bin_node *root)
 {
 	bin_node *prev, *current;
-	prev = root;
-	printf("%d\n", root->key);
-	current = root->lchild;
-	while(current != root || prev != root->rchild){
-		if(current == NULL){
-			current = prev;
-			prev = NULL;
+	prev = NULL;
+	current = root;
+	while(!(current == root && prev == root->rchild)){
+		if(prev == current->parent){
+			prev = current;
+			if(current->lchild != NULL){
+				current = current->lchild;
+			}
+			else if(current->rchild != NULL){
+				printf("%d\n", current->key);
+				current = current->rchild;
+			}
+			else{
+				printf("%d\n", current->key);
+				current = current->parent;
+			}
 			continue;
 		}
-		if(prev == current->parent){
+		if(prev == current->lchild){
 			printf("%d\n", current->key);
 			prev = current;
-			current = current->lchild;
-			continue;
-		}
-		if(prev == current->lchild && current->lchild != current->rchild){
-			prev = current;
-			current = current->rchild;
+			if(current->rchild != NULL){
+				prev = current;
+				current = current->rchild;
+			}
+			else{
+				current = current->parent;
+			}
 			continue;
 		}
 		if(prev == current->rchild){

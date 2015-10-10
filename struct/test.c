@@ -251,6 +251,6 @@ void open_hash_test()
 
 int main()
 {
-	open_hash_test();
+	bin_tree_test();
 	return 0;
 }
