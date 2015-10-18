@@ -1,7 +1,8 @@
 CC = gcc
-CFLAGS =  -Wall -Os -I../include -lm
+opt = -g
+CFLAGS =  -Wall $(opt) -I../include -lm
 out = test
-obj = ../utils/utils.o ../utils/sys.o test.o stack.o queue.o lk_list.o tree.o hash_table.o open_hash.o string.o
+obj = ../utils/utils.o ../utils/sys.o test.o stack.o queue.o lk_list.o tree.o hash_table.o open_hash.o string.o rbtree.o
 
 
 all: $(obj) 

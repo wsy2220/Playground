@@ -7,6 +7,7 @@
 #include "hash_table.h"
 #include "open_hash.h"
 #include "string.h"
+#include "rbtree.h"
 
 #define N 0x20
 
@@ -249,8 +250,42 @@ void open_hash_test()
 	open_hash_free(&ot);
 }
 
+void bs_tree_test()
+{
+	size_t i;
+	bin_node *root = NULL;
+	int temp;
+	for(i = 0; i < N; i++){
+		temp = rand()%N;
+		bs_tree_rinsert(&root, temp);
+	}
+	printf("temp = %d\n",temp);
+	bs_tree_del(&root,bs_tree_search(root, temp));
+	bin_tree_rprint(root);
+	bin_tree_free(root);
+}
+
+void rb_tree_test()
+{
+	size_t i;
+	rbtree tree;
+	rb_init(&tree);
+	int temp;
+	for(i = 0; i < 20; i++){
+		temp = rand()%100;
+		rb_insert(temp, &tree);
+	}
+	rb_print(&tree);
+	printf("\n");
+	rb_delete(tree.root->rchild, &tree);
+	rb_print(&tree);
+	rb_free(&tree);
+}
+
+
+
 int main()
 {
-	bin_tree_test();
+	rb_tree_test();
 	return 0;
 }
