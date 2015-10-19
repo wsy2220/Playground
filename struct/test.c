@@ -271,13 +271,13 @@ void rb_tree_test()
 	rbtree tree;
 	rb_init(&tree);
 	int temp;
-	for(i = 0; i < 20; i++){
+	for(i = 0; i < 100; i++){
 		temp = rand()%100;
 		rb_insert(temp, &tree);
 	}
 	rb_print(&tree);
 	printf("\n");
-	rb_delete(tree.root->rchild, &tree);
+	rb_delete(rb_max(tree.root->rchild->lchild, &tree), &tree);
 	rb_print(&tree);
 	rb_free(&tree);
 }

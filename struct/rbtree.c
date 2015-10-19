@@ -196,34 +196,99 @@ static void rb_trans(rbnode *old, rbnode *new, rbtree *tree)
 		old->parent->rchild = new;
 }
 
-
+static void rb_delete_fix(rbnode *node, rbtree *tree)
+{
+	rbnode *temp;
+	while(node != tree->root && node->color == rb_black){
+		if(node == node->parent->lchild){
+			temp = node->parent->rchild;
+			if(temp->color == rb_red){
+				temp->color = rb_black;
+				temp->parent->color = rb_red;
+				rb_rotate_l(temp->parent, tree);
+				temp = node->parent->rchild;
+			}
+			if(temp->rchild->color == rb_black && temp->lchild->color == rb_black){
+				temp->color = rb_red;
+				node = node->parent;
+			}
+			else{
+				if(temp->rchild->color == rb_black){
+					temp->lchild->color = rb_black;
+					temp->color = rb_red;
+					rb_rotate_r(temp, tree);
+					temp = node->parent->rchild;
+				}
+				temp->color = node->parent->color;
+				node->parent->color = rb_black;
+				temp->rchild->color = rb_black;
+				rb_rotate_l(node->parent, tree);
+				node = tree->root;
+			}
+		}
+		else{
+			temp = node->parent->lchild;
+			if(temp->color == rb_red){
+				temp->color = rb_black;
+				temp->parent->color = rb_red;
+				rb_rotate_r(temp->parent, tree);
+				temp = node->parent->lchild;
+			}
+			if(temp->lchild->color == rb_black && temp->rchild->color == rb_black){
+				temp->color = rb_red;
+				node = node->parent;
+			}
+			else{
+				if(temp->lchild->color == rb_black){
+					temp->rchild->color = rb_black;
+					temp->color = rb_red;
+					rb_rotate_l(temp, tree);
+					temp = node->parent->lchild;
+				}
+				temp->color = node->parent->color;
+				node->parent->color = rb_black;
+				temp->lchild->color = rb_black;
+				rb_rotate_r(node->parent, tree);
+				node = tree->root;
+			}
+		}
+	}
+	node->color = rb_black;
+}
 
 void rb_delete(rbnode *node, rbtree *tree)
 {
 	if(node == tree->nil)
 		return;
 	rbcolor color = node->color;
-	rbnode *new;
+	rbnode *new, *fix;
 	if(node->lchild == tree->nil){
 		new = node->lchild;
+		fix = new;
 		rb_trans(node, new, tree);
 	}
 	else if(node->rchild == tree->nil){
 		new = node->rchild;
+		fix = new;
 		rb_trans(node, new, tree);
 	}
 	else{
 		new = rb_min(node->rchild, tree);
+		fix = new->rchild;
 		color = new->color;
 		if(new->parent != node){
 			rb_trans(new, new->rchild, tree);
 			new->rchild = node->rchild;
 			new->rchild->parent = new;
 		}
+		else
+			fix->parent = new;
 		rb_trans(node, new, tree);
 		new->lchild = node->lchild;
 		node->lchild->parent = new;
-		new->color = color;
+		new->color = node->color;
 	}
+	if(color == rb_black)
+		rb_delete_fix(fix, tree);
 	free(node);
 }
