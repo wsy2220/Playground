@@ -8,6 +8,7 @@
 #include "open_hash.h"
 #include "string.h"
 #include "rbtree.h"
+#include "tree_print.h"
 
 #define N 0x20
 
@@ -272,13 +273,13 @@ void rb_tree_test()
 	rb_init(&tree);
 	int temp;
 	for(i = 0; i < 100; i++){
-		temp = rand()%100;
+		temp = rand()%10000;
 		rb_insert(temp, &tree);
 	}
-	rb_print(&tree);
-	printf("\n");
-	rb_delete(rb_max(tree.root->rchild->lchild, &tree), &tree);
-	rb_print(&tree);
+	//rb_print(&tree);
+	//printf("\n");
+	//rb_delete(rb_max(tree.root->rchild->lchild, &tree), &tree);
+	tree_print(&tree);
 	rb_free(&tree);
 }
 
